@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="renovaviva.css">
+
+  <title>Renova Viva</title>
+
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="container nav-container">
+      <div style="display:flex;align-items:center;gap:.5rem;">
+        <div style="background:var(--green-dark);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;">
+          🌱
+        </div>
+        <span style="font-weight:800;color:var(--green-dark);">Renova Viva</span>
+      </div>
+      <nav class="nav">
+        <a href="#inicio">Início</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#projetos">Projetos</a>
+        <a href="#doacao">Doação</a>
+        <a href="#contato">Contato</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section id="inicio" class="hero container">
+    <div class="hero-grid">
+      <div>
+        <span class="badge">🌱 Renovar é Viver</span>
+        <h1>Renovar hoje para viver amanhã.</h1>
+        <p>A Renova Viva atua em projetos de preservação ambiental e sustentabilidade, unindo pessoas e organizações para regenerar ecossistemas e transformar realidades.</p>
+        <a href="#doacao" class="btn btn-primary">Ajude com PIX</a>
+      </div>
+
+    </div>
+  <!-- Carrossel de Notícias -->
+<section id="noticias" class="container">
+  <h2>Notícias Ambientais</h2>
+  <div class="carousel card">
+    <div class="carousel-inner" id="carousel-inner"></div>
+
+    <!-- Controles -->
+    <button class="carousel-control prev" onclick="prevSlide()">&#10094;</button>
+    <button class="carousel-control next" onclick="nextSlide()">&#10095;</button>
+  </div>
+</section>
+
+<script>
+  const API_KEY = "pub_036b06d638e248f2bf204a3781d45474";
+  const endpoint = `https://newsdata.io/api/1/news?apikey=${API_KEY}&q=meio+ambiente&language=pt`;
+
+  async function fetchNews() {
+    try {
+      const res = await fetch(endpoint);
+      const data = await res.json();
+      return data.results || []; // NewsData.io usa "results"
+    } catch (err) {
+      console.error("Erro ao carregar notícias:", err);
+      return [];
+    }
+  }
+
+  async function loadCarousel() {
+    const articles = await fetchNews();
+    const carouselInner = document.getElementById("carousel-inner");
+
+    if (!articles.length) {
+      carouselInner.innerHTML = "<p>Não foi possível carregar notícias agora.</p>";
+      return;
+    }
+
+    articles.forEach((item, i) => {
+      const slide = document.createElement("div");
+      slide.className = "carousel-item";
+      if (i === 0) slide.classList.add("active");
+
+      slide.innerHTML = `
+        <img src="${item.image_url || 'https://via.placeholder.com/800x400?text=Notícia'}" alt="${item.title}">
+        <div class="carousel-caption">
+          <h3>${item.title}</h3>
+          <p>${item.description || ""}</p>
+          <a href="${item.link}" target="_blank" class="btn btn-secondary">Leia mais</a>
+        </div>
+      `;
+      carouselInner.appendChild(slide);
+    });
+
+    initCarousel();
+  }
+
+  let currentSlide = 0;
+  let slides;
+
+  function initCarousel() {
+    slides = document.querySelectorAll(".carousel-item");
+    showSlide(currentSlide);
+    setInterval(nextSlide, 100000); // muda automaticamente a cada 6s
+  }
+
+  function showSlide(index) {
+    slides.forEach((slide, i) => {
+      slide.classList.remove("active");
+      if (i === index) slide.classList.add("active");
+    });
+  }
+
+  function nextSlide() {
+    currentSlide = (currentSlide + 1) % slides.length;
+    showSlide(currentSlide);
+  }
+
+  function prevSlide() {
+    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+    showSlide(currentSlide);
+  }
+
+  // Inicia o carrossel ao carregar a página
+  loadCarousel();
+</script>
+
+
+
+  <!-- Projetos -->
+  <section id="projetos" class="container">
+    <h2>Projetos</h2>
+    <div class="projects-grid">
+      <div class="card"><img src="assets/ChatGPT Image Aug 23, 2025, 10_05_01 PM.png"><h3>🌲 Reflorestamento</h3><p>Mutirões de plantio e manutenção de espécies nativas.</p></div>
+      <div class="card"><img src="assets/ChatGPT Image Aug 23, 2025, 10_02_21 PM.png"><h3>♻️ Reciclagem</h3><p>Coleta seletiva, oficinas e logística reversa.</p></div>
+      <div class="card"><img src="assets/ChatGPT Image Aug 23, 2025, 10_07_31 PM.png"><h3>👥 Educação Ambiental</h3><p>Palestras, trilhas educativas e formação de multiplicadores.</p></div>
+    </div>
+  </section>
+
+  <!-- Doação PIX -->
+  <section id="doacao" class="container">
+    <h2>Ajude a ONG</h2>
+    <div class="pix-box">
+      <p>Sua contribuição nos ajuda a manter projetos ativos e ampliar nosso impacto socioambiental.</p>
+      <p>Faça sua doação via <strong>PIX</strong> usando a chave abaixo:</p>
+      <div class="pix-key">pix@renovaviva.org</div>
+      <p style="margin-top:1rem;color:rgba(0,0,0,0.7)">Qualquer valor faz a diferença 🌱</p>
+    </div>
+  </section>
+  <!-- Contato -->
+  <!-- Contato -->
+  <section id="contato" class="container">
+    <h2>Contato</h2>
+    <div class="grid" style="grid-template-columns: 1fr 1fr; gap:2rem;">
+
+      <!-- Informações de contato -->
+      <div class="card">
+        <p><strong>Email:</strong> ruansoutosantos@gmail.com</p>
+        <p><strong>Telefone:</strong> (71) 99999-0000</p>
+        <p><strong>Endereço:</strong> Rua Verde Esperança, 123 - Salvador, BA</p>
+        <p style="margin-top:1rem;">Siga-nos nas redes sociais:</p>
+        <p style="font-size:1.5rem;">
+  <a href="#" style="margin-right:15px; color:var(--green-dark);">
+    <i class="fab fa-facebook"></i>
+  </a>
+  <a href="#" style="margin-right:15px; color:var(--green-dark);">
+    <i class="fab fa-instagram"></i>
+  </a>
+  <a href="#" style="margin-right:15px; color:var(--green-dark);">
+    <i class="fab fa-twitter"></i>
+  </a>
+  <a href="#" style="color:var(--green-dark);">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+</p>
+
+      </div>
+
+      <!-- Formulário conectado ao Formspree -->
+      <div class="card">
+        <form action="https://formspree.io/f/xrbazgaj" method="POST">
+          <label for="nome">Nome</label><br>
+          <input type="text" id="nome" name="nome" required
+                 style="width:100%;padding:.6rem;border:1px solid #ccc;border-radius:.5rem;margin:.4rem 0;"><br>
+
+          <label for="email">Email</label><br>
+          <input type="email" id="email" name="_replyto" required
+                 style="width:100%;padding:.6rem;border:1px solid #ccc;border-radius:.5rem;margin:.4rem 0;"><br>
+
+          <label for="mensagem">Mensagem</label><br>
+          <textarea id="mensagem" name="mensagem" rows="4" required
+                    style="width:100%;padding:.6rem;border:1px solid #ccc;border-radius:.5rem;margin:.4rem 0;"></textarea><br>
+
+          <button type="submit" class="btn btn-secondary">Enviar</button>
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Renova Viva. Todos os direitos reservados.</p>
+  </footer>
+
+</body>
+</html>
